@@ -1,8 +1,13 @@
 import { test, expect } from '@playwright/test';
 
 
+test.describe('test describe', () => {
+
+test.beforeAll(async ({ page }) => {
+    await page.goto('https://demo.realworld.show/');
+});
+
 test('test AI', async ({ page }) => {
-  await page.goto('https://demo.realworld.show/');
   await page.getByRole('link', { name: 'ai', exact: true }).click();
   await page.getByText('ai').first().click();
   await page.getByRole('link', { name: 'Introduction to Machine' }).click();
@@ -10,11 +15,11 @@ test('test AI', async ({ page }) => {
 });
 
 
-
 test('test api', async ({ page }) => {
-  await page.goto('https://demo.realworld.show/');
   await page.getByRole('link', { name: 'api', exact: true }).click();
   await page.getByText('api').first().click();
   await page.getByRole('link', { name: /^Building Scalable/ }).click();
   await expect(page.locator('h1').first()).toContainText('Building Scalable APIs with Node.js');
+})
+
 });
