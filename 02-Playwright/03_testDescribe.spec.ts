@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('test describe', () => {
 
-test.beforeAll(async ({ page }) => {
+test.beforeEach(async ({ page }) => {
     await page.goto('https://demo.realworld.show/');
 });
 
