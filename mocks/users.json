@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "testUser",
+      "email": "ourOwn@hourtolearn.dev",
+      "role": "Admin",
+      "age": 18
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "pageSize": 1
+}
