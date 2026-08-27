@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import mockusers from "../mocks/users.json";
+import mockusers from "../mocks/getUsers.json";
 
 test("test api mocking", async ({ page }) => {
   // const mockusers = {
