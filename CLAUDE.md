@@ -75,3 +75,7 @@ tests; run them with `node` / `npx ts-node` if needed, not `playwright test`.
 - Locators consistently prefer `getByTestId(...)` (data-testid attributes on the target app) with
   `getByRole(...)` used as an alternative/fallback in a couple of tests — prefer `getByTestId` for
   new tests unless matching an existing test's style.
+
+
+## Test execution condition
+Whenever testing a testcase using npx playwright test command, tun with headed mode so user can see the test execution
