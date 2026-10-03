@@ -11,7 +11,9 @@ test("dragging a card moves it from To Do to In Progress", async ({ page }) => {
 
   await expect(card).toHaveText("Write a locator strategy doc");
 
-  await card.dragTo(inProgressColumn.locator("[data-dropzone]"));
+  await card.dragTo(
+    inProgressColumn.locator("[data-dropzone]") // locator chaining: narrows from the column down to its actual drop target element
+  );
 
   await expect(todoColumn).not.toContainText("Write a locator strategy doc");
   await expect(inProgressColumn).toContainText("Write a locator strategy doc");
