@@ -8,3 +8,5 @@ node_modules/
 /playwright/.auth/
 /.playwright-mcp
 /.playwright-cli
+# Playwright CLI output (may contain credentials)
+.playwright-cli/
