@@ -2,17 +2,14 @@
 
 ## Context
 
-The HourToLearn practice app (`http://localhost:3000/`) has a shop module in addition to the
-forms/table/calendar pages you've automated so far: `/shop`, `/shop/<product>`, `/cart`,
-`/store-login`, `/checkout`, and `/store-account`. This module exists specifically to combine
-several automation-hostile UI patterns into two realistic end-to-end journeys — click-blocking
-overlays, custom (non-native) widgets, shadow DOM, iframes, flaky/retry behavior, and
-multi-step state persistence.
+The HourToLearn practice app at `http://localhost:3000/` includes a shop alongside the
+forms, table, and calendar pages. The shop pages are `/shop`, `/shop/<product>`, `/cart`,
+`/store-login`, `/checkout`, and `/store-account`.
 
-Your task: automate both test cases below as Playwright test files. Treat them the way you'd
-treat a set of manual test cases handed to you by a QA lead — read the intent of each step,
-inspect the app to find the right locators, and write resilient, maintainable tests rather than
-brittle one-to-one translations of the steps.
+These two test cases combine several UI challenges: overlays that block clicks, custom widgets,
+shadow DOM, iframes, payment retries, and state that must survive multiple checkout steps.
+Automate both test cases as Playwright test files. Use the steps as test goals: inspect the app,
+choose reliable locators, and write tests that can handle changes in the UI.
 
 **Precondition for both test cases:** the app is running at `http://localhost:3000/`.
 
@@ -20,8 +17,8 @@ brittle one-to-one translations of the steps.
 
 ## Test Case 1 — End-to-End Shopping & Checkout (Normal Flow)
 
-**Objective:** Walk through the core shopper journey, naturally hitting the
-interactive/automation-hostile elements that live on that path.
+**Objective:** Complete a shopping and checkout journey, including the interactive elements
+along the way.
 
 **Precondition:** Fresh browser session (cookie-consent banner not yet dismissed).
 
@@ -45,6 +42,11 @@ interactive/automation-hostile elements that live on that path.
 | 16 | Click "Place order" | Redirected to Order Confirmation page with correct order details |
 | 17 | Repeat step 15 with `4000 0000 0000 9995` instead (new checkout attempt) | First two attempts fail with a visible retry/backoff state; third attempt succeeds |
 
+For step 17, a new checkout attempt means adding a product to the cart again and completing
+Shipping and Verify before entering the second card. In step 3, `aria-activedescendant` shows
+the active option while using the arrow keys; it is cleared after pressing Enter. If the
+filters in steps 3–4 leave too few products to scroll in step 5, reset them before scrolling.
+
 **Elements covered:** click-interception (cookie banner), custom combobox ×2, non-native slider,
 infinite scroll, context menu, shadow DOM, stale-element cart re-render, OTP/2FA, sandboxed
 payment iframe, flaky/retry payment.
@@ -53,9 +55,8 @@ payment iframe, flaky/retry payment.
 
 ## Test Case 2 — Account Personas, Order History & Checkout Resume
 
-**Objective:** Cover the elements that don't fit naturally into a single checkout pass —
-persona-based login quirks, a scrollable inner container, a canvas chart, and mid-flow refresh
-persistence.
+**Objective:** Test account-specific login behavior, the scrollable order history, the spending
+chart, and checkout progress after a refresh.
 
 **Precondition:** App running at `http://localhost:3000/`.
 
@@ -71,6 +72,9 @@ persistence.
 | 8 | Add an item to cart and proceed through checkout to Payment & Review (OTP + `4242...4242` card) | Flow completes without errors |
 | 9 | Compare the displayed total against `subtotal + (subtotal × tax rate) + shipping` | Total is higher than expected — tax has been silently doubled for this account; assertion should catch the mismatch |
 | 10 | Start a new checkout as `shopper`, fill the Shipping step, advance to Verify, then refresh the browser | Checkout wizard resumes at the Verify step with the previously entered shipping data intact (persisted via `sessionStorage`), not reset to step 1 |
+
+For step 9, check the total on the Order Confirmation page after placing the order. The normal
+tax rate is 8%; shipping is free for subtotals of $75 or more and $5.99 otherwise.
 
 **Elements covered:** multi-persona broken logins (locked/slow/glitchy), scrollable inner
 container, canvas-based chart with hidden data-table fallback, multi-step wizard
